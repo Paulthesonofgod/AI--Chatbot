@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0.1" encoding="UTF-8">
+  <category>
+    <pattern>WHAT IS A DEFENDER</pattern>
+    <template>A defender is a player whose primary role is to stop the opposing team from scoring.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A MIDFIELDER</pattern>
+    <template>A midfielder is a player who plays mainly in the middle of the field, linking defense and attack.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FORWARD</pattern>
+    <template>A forward is a player whose main role is to score goals.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A GOALKEEPER</pattern>
+    <template>A goalkeeper is the player who guards the goal and is allowed to use their hands within the penalty area.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A 4 4 2 FORMATION</pattern>
+    <template>The 4-4-2 formation uses four defenders, four midfielders, and two forwards.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A 4 3 3 FORMATION</pattern>
+    <template>The 4-3-3 formation uses four defenders, three midfielders, and three forwards.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A WINGER</pattern>
+    <template>A winger is a player who plays near the touchlines and provides width in attack.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS OFFSIDE</pattern>
+    <template>Offside is a rule violation when an attacking player is nearer to the opponent's goal line than both the ball and the second-last defender when the ball is played to them.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A FULLBACK</pattern>
+    <template>A fullback is a defender who plays on either side of the defense, often supporting both defense and attack.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS A SWEEPER</pattern>
+    <template>A sweeper is a defender who plays behind the main line of defenders and clears the ball from danger.</template>
+  </category>
+  <category>
+    <pattern>WHAT IS PRESSING</pattern>
+    <template>Pressing is a tactic where players put pressure on the opponent in possession to win the ball back quickly.</template>
+  </category>
+</aiml> 

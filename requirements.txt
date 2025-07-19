@@ -1,0 +1,8 @@
+python-aiml
+pandas
+nltk
+scikit-learn
+tensorflow
+keras
+numpy
+Pillow 

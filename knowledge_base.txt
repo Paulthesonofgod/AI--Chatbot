@@ -1,0 +1,1 @@
+# NLTK FOL statements for football tactics and player positions 
