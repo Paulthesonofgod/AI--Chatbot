@@ -4,9 +4,9 @@ import nltk
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from keras.models import load_model
 from PIL import Image
 import os
+import pickle
 
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -110,22 +110,34 @@ def parse_check_input(user_input):
 def load_cnn_model(model_path):
     if not os.path.exists(model_path):
         print(f"Warning: CNN model file '{model_path}' not found. Image classification will be disabled.")
-        return None
-    return load_model(model_path)
+        return None, None, None
+    try:
+        with open(model_path, 'rb') as f:
+            model, scaler, class_names = pickle.load(f)
+        return model, scaler, class_names
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        return None, None, None
 
-def classify_image(model, image_path, class_indices):
+def classify_image(model, scaler, class_names, image_path):
     try:
         img = Image.open(image_path).convert('RGB')
-        img = img.resize((64, 64))
-        arr = np.array(img) / 255.0
-        arr = np.expand_dims(arr, axis=0)
-        preds = model.predict(arr)
-        class_idx = np.argmax(preds)
-        # Reverse class_indices dict to get label
-        idx_to_class = {v: k for k, v in class_indices.items()}
-        return idx_to_class.get(class_idx, 'Unknown')
+        img = img.resize((32, 32))
+        # Convert to grayscale and flatten
+        img_gray = img.convert('L')
+        img_array = np.array(img_gray).flatten() / 255.0
+        img_array = img_array.reshape(1, -1)
+        
+        # Scale features
+        img_scaled = scaler.transform(img_array)
+        
+        # Predict
+        prediction = model.predict(img_scaled)[0]
+        confidence = model.predict_proba(img_scaled).max()
+        
+        return class_names[prediction], confidence
     except Exception as e:
-        return f"Error classifying image: {e}"
+        return f"Error classifying image: {e}", 0.0
 
 def main():
     # 1. AIML chatbot setup
@@ -146,11 +158,8 @@ def main():
     facts = load_knowledge_base(kb_file)
 
     # 5. Load CNN model
-    cnn_model_path = "cnn_model.h5"
-    cnn_model = load_cnn_model(cnn_model_path)
-    # Set class indices (must match those printed during training)
-    class_indices = {'Defender': 0, 'Forward': 1, 'Goalkeeper': 2, 'Midfielder': 3}
-    # If you have the actual mapping from your training, update this dict accordingly.
+    cnn_model_path = "cnn_model.pkl"
+    cnn_model, scaler, class_names = load_cnn_model(cnn_model_path)
 
     print("Football Tactics Chatbot (type 'exit' to quit)")
     while True:
@@ -167,8 +176,8 @@ def main():
             if not os.path.exists(image_path):
                 print(f"Bot: Image file '{image_path}' not found.")
                 continue
-            result = classify_image(cnn_model, image_path, class_indices)
-            print(f"Bot: This image is classified as: {result}")
+            result, confidence = classify_image(cnn_model, scaler, class_names, image_path)
+            print(f"Bot: This image is classified as: {result} (confidence: {confidence:.2f})")
             continue
         # 1. Check direct CSV Q/A match
         answer = qa_dict.get(user_input.lower())
